@@ -4,8 +4,8 @@
     "name": "bhadvab",
     "version": "v0.1",
     "graph": {
-      "nodes": [
-        {
+      "nodes": {
+        "0": {
           "id": "sysInput",
           "type": "inputNode",
           "position": {
@@ -23,7 +23,7 @@
           "selected": false,
           "dragging": false
         },
-        {
+        "1": {
           "id": "sysOutput",
           "type": "outputNode",
           "position": {
@@ -40,14 +40,36 @@
           },
           "selected": false,
           "dragging": false
+        },
+        "sys_input": {
+          "id": "sys_input",
+          "type": "sys_input",
+          "label": "Input Data",
+          "x": 100,
+          "y": 300,
+          "width": 200,
+          "height": 100,
+          "data": {
+            "datasetId": "a6397836-ae25-4f47-96a2-052ebf22b1da",
+            "tableName": ""
+          },
+          "status": "idle"
+        },
+        "sys_output": {
+          "id": "sys_output",
+          "type": "sys_output",
+          "label": "Model Output",
+          "x": 800,
+          "y": 300,
+          "width": 200,
+          "height": 100,
+          "data": {
+            "result": null
+          },
+          "status": "idle"
         }
-      ],
-      "edges": [],
-      "viewport": {
-        "x": 412.01,
-        "y": 154.54,
-        "zoom": 0.58
-      }
+      },
+      "edges": []
     },
     "assets": [
       {
@@ -59,19 +81,83 @@
         "createdAt": "2026-03-06T08:21:04.838Z"
       }
     ],
-    "datasets": [
-      {
-        "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
-        "name": "IRIS dataset - Classification ",
-        "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
-        "source": "Kaggle",
-        "size": "Remote",
-        "createdAt": "2026-03-06T08:21:04.838Z"
-      }
-    ],
+    "datasets": [],
     "readme": "",
-    "meta": {},
-    "lastSaved": "2026-03-06T08:21:42.449Z"
+    "meta": {
+      "id": null,
+      "name": "bhadvab",
+      "version": "v0.1",
+      "graph": {
+        "nodes": [
+          {
+            "id": "sysInput",
+            "type": "inputNode",
+            "position": {
+              "x": -200,
+              "y": 350
+            },
+            "data": {
+              "label": "System Input",
+              "schema": []
+            },
+            "measured": {
+              "width": 334,
+              "height": 165
+            },
+            "selected": false,
+            "dragging": false
+          },
+          {
+            "id": "sysOutput",
+            "type": "outputNode",
+            "position": {
+              "x": 900,
+              "y": 350
+            },
+            "data": {
+              "label": "System Output",
+              "schema": []
+            },
+            "measured": {
+              "width": 334,
+              "height": 165
+            },
+            "selected": false,
+            "dragging": false
+          }
+        ],
+        "edges": [],
+        "viewport": {
+          "x": 412.01,
+          "y": 154.54,
+          "zoom": 0.58
+        }
+      },
+      "assets": [
+        {
+          "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
+          "name": "IRIS dataset - Classification ",
+          "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
+          "source": "Kaggle",
+          "size": "Remote",
+          "createdAt": "2026-03-06T08:21:04.838Z"
+        }
+      ],
+      "datasets": [
+        {
+          "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
+          "name": "IRIS dataset - Classification ",
+          "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
+          "source": "Kaggle",
+          "size": "Remote",
+          "createdAt": "2026-03-06T08:21:04.838Z"
+        }
+      ],
+      "readme": "",
+      "meta": {},
+      "lastSaved": "2026-03-06T08:21:42.449Z"
+    },
+    "lastSaved": "2026-03-06T09:37:55.973Z"
   },
   "graph": {
     "nodes": {
@@ -137,18 +223,36 @@
           "result": null
         },
         "status": "idle"
+      },
+      "a9cafe27-157c-4981-9f65-9083b05e21bd": {
+        "id": "a9cafe27-157c-4981-9f65-9083b05e21bd",
+        "type": "data cleaning",
+        "label": "Handle Missing With Imputer",
+        "x": 446,
+        "y": 238,
+        "width": 217,
+        "height": 88,
+        "inputs": [],
+        "outputs": [],
+        "data": {
+          "description": "Advanced missing value imputation using SimpleImputer",
+          "dbId": "69823c4d33b7b112b6355f5b"
+        },
+        "status": "idle"
       }
     },
-    "edges": []
-  },
-  "assets": [
-    {
-      "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
-      "name": "IRIS dataset - Classification ",
-      "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
-      "source": "Kaggle",
-      "size": "Remote",
-      "createdAt": "2026-03-06T08:21:04.838Z"
+    "edges": {
+      "06d45b73-c868-40a9-ad2f-baa9c8d4bfa9": {
+        "id": "06d45b73-c868-40a9-ad2f-baa9c8d4bfa9",
+        "source": "sys_input",
+        "target": "a9cafe27-157c-4981-9f65-9083b05e21bd"
+      },
+      "cc190c72-fe13-4dd9-a872-023d02c080bc": {
+        "id": "cc190c72-fe13-4dd9-a872-023d02c080bc",
+        "source": "a9cafe27-157c-4981-9f65-9083b05e21bd",
+        "target": "sys_output"
+      }
     }
-  ]
+  },
+  "assets": []
 }
