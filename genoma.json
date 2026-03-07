@@ -305,8 +305,8 @@
     "datasets": [],
     "customComponents": [
       {
-        "name": "custom_newcustom.py",
-        "path": "components/custom_newcustom.py",
+        "name": "custom_new.py",
+        "path": "components/custom_new.py",
         "content": "# Define your custom component logic here\n\n",
         "readOnly": false
       }
@@ -316,6 +316,7 @@
       "id": null,
       "name": "bhadvab",
       "version": "v0.1",
+      "projectType": "custom",
       "graph": {
         "nodes": {
           "0": {
@@ -403,6 +404,202 @@
               "schemaInputs": []
             },
             "status": "idle"
+          },
+          "2dccc453-8883-475a-a4be-4d515448840b": {
+            "id": "2dccc453-8883-475a-a4be-4d515448840b",
+            "type": "Data Cleaning",
+            "label": "The Gap Filler",
+            "x": 433,
+            "y": 529,
+            "width": 160,
+            "height": 136,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Hunts down missing values and seals every hole in your dataset — from quick drops to intelligent reconstruction.",
+              "dbId": "69abb409b6b43632e87b6d6d",
+              "characterId": "missing_value_handler",
+              "level": 1,
+              "levelName": "Rough Cut",
+              "power": "Novice",
+              "componentName": "Handle Missing Values Drop",
+              "code": "def handle_missing_values_drop(df):\n    \"\"\"Drop rows with missing values\"\"\"\n    return df.dropna()",
+              "schemaInputs": []
+            },
+            "status": "idle"
+          },
+          "31d61c1b-2239-4603-b9ee-98688e9a3103": {
+            "id": "31d61c1b-2239-4603-b9ee-98688e9a3103",
+            "type": "Data Cleaning",
+            "label": "The Clone Slayer",
+            "x": 496,
+            "y": 131,
+            "width": 160,
+            "height": 124,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Identifies and eliminates redundant rows, keeping your dataset lean and unique.",
+              "dbId": "69abb409b6b43632e87b6d6e",
+              "characterId": "duplicate_cleaner",
+              "level": 1,
+              "levelName": "Duplicate Destroyer",
+              "power": "Novice",
+              "componentName": "Remove Duplicates",
+              "code": "def remove_duplicates(df):\n    \"\"\"Remove duplicate rows\"\"\"\n    return df.drop_duplicates()",
+              "schemaInputs": []
+            },
+            "status": "idle"
+          },
+          "3e9693fd-baf1-42ff-bf15-403c5c1623d8": {
+            "id": "3e9693fd-baf1-42ff-bf15-403c5c1623d8",
+            "type": "Data Cleaning",
+            "label": "The Anomaly Warden",
+            "x": 364,
+            "y": 397,
+            "width": 160,
+            "height": 148,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Detects and neutralises rogue data points — from simple range checks to intelligent density-based detection.",
+              "dbId": "69abb409b6b43632e87b6d6f",
+              "characterId": "outlier_handler",
+              "level": 1,
+              "levelName": "Range Guardian",
+              "power": "Novice",
+              "componentName": "Remove Outliers IQR",
+              "code": "def remove_outliers_iqr(df):\n    \"\"\"Remove outliers using IQR method\n    \n    Args:\n        df: DataFrame to process\n        column: Column name to check for outliers. If None, processes all numeric columns.\n    \"\"\"\n    column = df.attrs.get('column')\n    if column is not None:\n        # Single column mode\n        Q1 = df[column].quantile(0.25)\n        Q3 = df[column].quantile(0.75)\n        IQR = Q3 - Q1\n        lower_bound = Q1 - 1.5 * IQR\n        upper_bound = Q3 + 1.5 * IQR\n        return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]\n    else:\n        # Multi-column mode: remove outliers from all numeric columns\n        result = df.copy()\n        numeric_cols = result.select_dtypes(include=[np.number]).columns\n        \n        for col in numeric_cols:\n            Q1 = result[col].quantile(0.25)\n            Q3 = result[col].quantile(0.75)\n            IQR = Q3 - Q1\n            lower_bound = Q1 - 1.5 * IQR\n            upper_bound = Q3 + 1.5 * IQR\n            result = result[(result[col] >= lower_bound) & (result[col] <= upper_bound)]\n        \n        return result",
+              "schemaInputs": [
+                {
+                  "name": "column",
+                  "type": "string",
+                  "description": "Column name to check for outliers",
+                  "required": true
+                }
+              ]
+            },
+            "status": "idle"
+          },
+          "3d501fd9-01a2-4b91-bb30-dea17cbf9f90": {
+            "id": "3d501fd9-01a2-4b91-bb30-dea17cbf9f90",
+            "type": "Data Preprocessing",
+            "label": "The Equalizer",
+            "x": 344,
+            "y": 129,
+            "width": 160,
+            "height": 124,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Brings all numeric features onto a level playing field so no single variable dominates the model.",
+              "dbId": "69abb409b6b43632e87b6d70",
+              "characterId": "feature_scaler",
+              "level": 1,
+              "levelName": "Boundary Binder",
+              "power": "Novice",
+              "componentName": "Min-Max Scaling",
+              "code": "def min_max_scaling(df):\n    \"\"\"Min-Max Scaling: scale to range [0, 1] or custom range\"\"\"\n    feature_range = df.attrs.get('feature_range', (0, 1))\n    from sklearn.preprocessing import MinMaxScaler\n    scaler = MinMaxScaler(feature_range=feature_range)\n    return pd.DataFrame(scaler.fit_transform(df), columns=df.columns)",
+              "schemaInputs": [
+                {
+                  "name": "feature_range",
+                  "type": "tuple",
+                  "description": "Target range for scaling",
+                  "required": false,
+                  "default_value": "(0, 1)"
+                }
+              ]
+            },
+            "status": "idle"
+          },
+          "1e2cee57-8b0e-4757-8d6f-c09369e0fbe6": {
+            "id": "1e2cee57-8b0e-4757-8d6f-c09369e0fbe6",
+            "type": "Data Preprocessing",
+            "label": "The Translator",
+            "x": 557,
+            "y": 437,
+            "width": 160,
+            "height": 160,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Converts raw categories into numeric language that models understand — from simple labels to sophisticated statistical embeddings.",
+              "dbId": "69abb409b6b43632e87b6d72",
+              "characterId": "categorical_encoder",
+              "level": 1,
+              "levelName": "Number Stamper",
+              "power": "Novice",
+              "componentName": "Label Encoding",
+              "code": "def label_encoding(df):\n    \"\"\"Label Encoding: convert categories to numbers (0, 1, 2, ...)\"\"\"\n    column = df.attrs.get('column')\n    encoder = LabelEncoder()\n    df[column] = encoder.fit_transform(df[column])\n    return df",
+              "schemaInputs": [
+                {
+                  "name": "column",
+                  "type": "string",
+                  "description": "Column name to encode",
+                  "required": true
+                }
+              ]
+            },
+            "status": "idle"
+          },
+          "61816969-7d24-4a10-802d-2f58d8952c3c": {
+            "id": "61816969-7d24-4a10-802d-2f58d8952c3c",
+            "type": "NLP Preprocessing",
+            "label": "The Word Surgeon",
+            "x": 581,
+            "y": 233,
+            "width": 160,
+            "height": 136,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Scrubs raw text of noise — slashing punctuation, URLs, emojis, HTML, and stopwords into clean linguistic tokens.",
+              "dbId": "69abb409b6b43632e87b6d73",
+              "characterId": "text_cleaner",
+              "level": 1,
+              "levelName": "Case Crusher",
+              "power": "Novice",
+              "componentName": "Lowercase Text",
+              "code": "def lowercase_text(df):\n    \"\"\"Convert text to lowercase\"\"\"\n    if isinstance(df, pd.DataFrame):\n        # Apply to all string columns\n        for col in df.select_dtypes(include=['object']).columns:\n            df[col] = df[col].str.lower()\n        return df\n    return df.lower()",
+              "schemaInputs": []
+            },
+            "status": "idle"
+          },
+          "2055ec28-5e8c-488e-bce4-0df725dd4ab4": {
+            "id": "2055ec28-5e8c-488e-bce4-0df725dd4ab4",
+            "type": "Computer Vision Preprocessing",
+            "label": "The Pixel Sculptor",
+            "x": 709,
+            "y": 473,
+            "width": 160,
+            "height": 136,
+            "inputs": [],
+            "outputs": [],
+            "data": {
+              "description": "Shapes raw images into model-ready tensors — resizing, augmenting, converting, and normalising pixel space.",
+              "dbId": "69abb409b6b43632e87b6d74",
+              "characterId": "image_preprocessor",
+              "level": 1,
+              "levelName": "Dimension Shaper",
+              "power": "Novice",
+              "componentName": "Resize Image",
+              "code": "def resize_image(df):\n    \"\"\"Resize df to specified dimensions\"\"\"\n    width = df.attrs.get('width')\n    height = df.attrs.get('height')\n    from PIL import Image\n    return df.resize((width, height))",
+              "schemaInputs": [
+                {
+                  "name": "width",
+                  "type": "any",
+                  "description": "width parameter",
+                  "required": true
+                },
+                {
+                  "name": "height",
+                  "type": "any",
+                  "description": "height parameter",
+                  "required": true
+                }
+              ]
+            },
+            "status": "idle"
           }
         },
         "edges": {
@@ -418,8 +615,15 @@
           }
         }
       },
-      "assets": [],
       "datasets": [],
+      "customComponents": [
+        {
+          "name": "custom_newcustom.py",
+          "path": "components/custom_newcustom.py",
+          "content": "# Define your custom component logic here\n\n",
+          "readOnly": false
+        }
+      ],
       "readme": "",
       "meta": {
         "id": null,
@@ -490,32 +694,39 @@
               },
               "status": "idle"
             },
-            "a9cafe27-157c-4981-9f65-9083b05e21bd": {
-              "id": "a9cafe27-157c-4981-9f65-9083b05e21bd",
-              "type": "data cleaning",
-              "label": "Handle Missing With Imputer",
-              "x": 446,
-              "y": 238,
-              "width": 217,
-              "height": 88,
+            "d4ad7c1b-5300-4a57-8332-51e67079bd6d": {
+              "id": "d4ad7c1b-5300-4a57-8332-51e67079bd6d",
+              "type": "Data Cleaning",
+              "label": "The Gap Filler",
+              "x": 403.8310530240068,
+              "y": 255.44865422754478,
+              "width": 160,
+              "height": 136,
               "inputs": [],
               "outputs": [],
               "data": {
-                "description": "Advanced missing value imputation using SimpleImputer",
-                "dbId": "69823c4d33b7b112b6355f5b"
+                "description": "Hunts down missing values and seals every hole in your dataset — from quick drops to intelligent reconstruction.",
+                "dbId": "69abb409b6b43632e87b6d6d",
+                "characterId": "missing_value_handler",
+                "level": 1,
+                "levelName": "Rough Cut",
+                "power": "Novice",
+                "componentName": "Handle Missing Values Drop",
+                "code": "def handle_missing_values_drop(df):\n    \"\"\"Drop rows with missing values\"\"\"\n    return df.dropna()",
+                "schemaInputs": []
               },
               "status": "idle"
             }
           },
           "edges": {
-            "06d45b73-c868-40a9-ad2f-baa9c8d4bfa9": {
-              "id": "06d45b73-c868-40a9-ad2f-baa9c8d4bfa9",
+            "be6e83fc-1dca-4f5b-a0b9-aba403163ca5": {
+              "id": "be6e83fc-1dca-4f5b-a0b9-aba403163ca5",
               "source": "sys_input",
-              "target": "a9cafe27-157c-4981-9f65-9083b05e21bd"
+              "target": "d4ad7c1b-5300-4a57-8332-51e67079bd6d"
             },
-            "cc190c72-fe13-4dd9-a872-023d02c080bc": {
-              "id": "cc190c72-fe13-4dd9-a872-023d02c080bc",
-              "source": "a9cafe27-157c-4981-9f65-9083b05e21bd",
+            "6f4043b7-c2ea-4378-b54f-b83da07af81e": {
+              "id": "6f4043b7-c2ea-4378-b54f-b83da07af81e",
+              "source": "d4ad7c1b-5300-4a57-8332-51e67079bd6d",
               "target": "sys_output"
             }
           }
@@ -591,20 +802,38 @@
                   "result": null
                 },
                 "status": "idle"
+              },
+              "a9cafe27-157c-4981-9f65-9083b05e21bd": {
+                "id": "a9cafe27-157c-4981-9f65-9083b05e21bd",
+                "type": "data cleaning",
+                "label": "Handle Missing With Imputer",
+                "x": 446,
+                "y": 238,
+                "width": 217,
+                "height": 88,
+                "inputs": [],
+                "outputs": [],
+                "data": {
+                  "description": "Advanced missing value imputation using SimpleImputer",
+                  "dbId": "69823c4d33b7b112b6355f5b"
+                },
+                "status": "idle"
               }
             },
-            "edges": []
-          },
-          "assets": [
-            {
-              "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
-              "name": "IRIS dataset - Classification ",
-              "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
-              "source": "Kaggle",
-              "size": "Remote",
-              "createdAt": "2026-03-06T08:21:04.838Z"
+            "edges": {
+              "06d45b73-c868-40a9-ad2f-baa9c8d4bfa9": {
+                "id": "06d45b73-c868-40a9-ad2f-baa9c8d4bfa9",
+                "source": "sys_input",
+                "target": "a9cafe27-157c-4981-9f65-9083b05e21bd"
+              },
+              "cc190c72-fe13-4dd9-a872-023d02c080bc": {
+                "id": "cc190c72-fe13-4dd9-a872-023d02c080bc",
+                "source": "a9cafe27-157c-4981-9f65-9083b05e21bd",
+                "target": "sys_output"
+              }
             }
-          ],
+          },
+          "assets": [],
           "datasets": [],
           "readme": "",
           "meta": {
@@ -612,8 +841,8 @@
             "name": "bhadvab",
             "version": "v0.1",
             "graph": {
-              "nodes": [
-                {
+              "nodes": {
+                "0": {
                   "id": "sysInput",
                   "type": "inputNode",
                   "position": {
@@ -631,7 +860,7 @@
                   "selected": false,
                   "dragging": false
                 },
-                {
+                "1": {
                   "id": "sysOutput",
                   "type": "outputNode",
                   "position": {
@@ -648,14 +877,36 @@
                   },
                   "selected": false,
                   "dragging": false
+                },
+                "sys_input": {
+                  "id": "sys_input",
+                  "type": "sys_input",
+                  "label": "Input Data",
+                  "x": 100,
+                  "y": 300,
+                  "width": 200,
+                  "height": 100,
+                  "data": {
+                    "datasetId": "a6397836-ae25-4f47-96a2-052ebf22b1da",
+                    "tableName": ""
+                  },
+                  "status": "idle"
+                },
+                "sys_output": {
+                  "id": "sys_output",
+                  "type": "sys_output",
+                  "label": "Model Output",
+                  "x": 800,
+                  "y": 300,
+                  "width": 200,
+                  "height": 100,
+                  "data": {
+                    "result": null
+                  },
+                  "status": "idle"
                 }
-              ],
-              "edges": [],
-              "viewport": {
-                "x": 412.01,
-                "y": 154.54,
-                "zoom": 0.58
-              }
+              },
+              "edges": []
             },
             "assets": [
               {
@@ -667,21 +918,105 @@
                 "createdAt": "2026-03-06T08:21:04.838Z"
               }
             ],
-            "datasets": [
-              {
-                "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
-                "name": "IRIS dataset - Classification ",
-                "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
-                "source": "Kaggle",
-                "size": "Remote",
-                "createdAt": "2026-03-06T08:21:04.838Z"
-              }
-            ],
+            "datasets": [],
             "readme": "",
-            "meta": {},
-            "lastSaved": "2026-03-06T08:21:42.449Z"
+            "meta": {
+              "id": null,
+              "name": "bhadvab",
+              "version": "v0.1",
+              "graph": {
+                "nodes": [
+                  {
+                    "id": "sysInput",
+                    "type": "inputNode",
+                    "position": {
+                      "x": -200,
+                      "y": 350
+                    },
+                    "data": {
+                      "label": "System Input",
+                      "schema": []
+                    },
+                    "measured": {
+                      "width": 334,
+                      "height": 165
+                    },
+                    "selected": false,
+                    "dragging": false
+                  },
+                  {
+                    "id": "sysOutput",
+                    "type": "outputNode",
+                    "position": {
+                      "x": 900,
+                      "y": 350
+                    },
+                    "data": {
+                      "label": "System Output",
+                      "schema": []
+                    },
+                    "measured": {
+                      "width": 334,
+                      "height": 165
+                    },
+                    "selected": false,
+                    "dragging": false
+                  }
+                ],
+                "edges": [],
+                "viewport": {
+                  "x": 412.01,
+                  "y": 154.54,
+                  "zoom": 0.58
+                }
+              },
+              "assets": [
+                {
+                  "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
+                  "name": "IRIS dataset - Classification ",
+                  "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
+                  "source": "Kaggle",
+                  "size": "Remote",
+                  "createdAt": "2026-03-06T08:21:04.838Z"
+                }
+              ],
+              "datasets": [
+                {
+                  "id": "a6397836-ae25-4f47-96a2-052ebf22b1da",
+                  "name": "IRIS dataset - Classification ",
+                  "url": "https://www.kaggle.com/datasets/taweilo/iris-dataset-elarged-with-smote",
+                  "source": "Kaggle",
+                  "size": "Remote",
+                  "createdAt": "2026-03-06T08:21:04.838Z"
+                }
+              ],
+              "readme": "",
+              "meta": {},
+              "lastSaved": "2026-03-06T08:21:42.449Z"
+            },
+            "lastSaved": "2026-03-06T09:37:55.973Z"
           },
-          "lastSaved": "2026-03-06T09:37:55.973Z"
+          "customComponents": [
+            {
+              "name": "custom_my_component.py",
+              "path": "components/custom_my_component.py",
+              "content": "# Define your custom component logic here\n\n",
+              "readOnly": false
+            },
+            {
+              "name": "custom_bhadwa.py",
+              "path": "components/custom_bhadwa.py",
+              "content": "# Define your custom component logic here\n\n",
+              "readOnly": false
+            },
+            {
+              "name": "custom_he.py",
+              "path": "components/custom_he.py",
+              "content": "# Define your custom component logic here\n\n",
+              "readOnly": false
+            }
+          ],
+          "lastSaved": "2026-03-07T19:09:40.137Z"
         },
         "customComponents": [
           {
@@ -703,32 +1038,13 @@
             "readOnly": false
           }
         ],
-        "lastSaved": "2026-03-07T19:09:40.137Z"
+        "lastSaved": "2026-03-07T21:09:06.625Z"
       },
-      "customComponents": [
-        {
-          "name": "custom_my_component.py",
-          "path": "components/custom_my_component.py",
-          "content": "# Define your custom component logic here\n\n",
-          "readOnly": false
-        },
-        {
-          "name": "custom_bhadwa.py",
-          "path": "components/custom_bhadwa.py",
-          "content": "# Define your custom component logic here\n\n",
-          "readOnly": false
-        },
-        {
-          "name": "custom_he.py",
-          "path": "components/custom_he.py",
-          "content": "# Define your custom component logic here\n\n",
-          "readOnly": false
-        }
-      ],
-      "lastSaved": "2026-03-07T21:09:06.625Z"
+      "assets": [],
+      "lastSaved": "2026-03-07T21:19:09.024Z"
     },
     "assets": [],
-    "lastSaved": "2026-03-07T21:19:09.024Z"
+    "lastSaved": "2026-03-07T21:23:52.013Z"
   },
   "graph": {
     "nodes": {
